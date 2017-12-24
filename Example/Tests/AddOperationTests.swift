@@ -24,11 +24,10 @@ class JPSAddOperationTests: XCTestCase {
     private func testPatchFailOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try! JPSJsonPatch(jsonPatchString)
-            let _ = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
-            XCTFail("Should have raised an error.")
+            let jsonPatch = try JPSJsonPatch(jsonPatchString)
+            XCTAssertThrowsError(try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json))
         } catch {
-            // pass
+            XCTFail(error.localizedDescription)
         }
     }
     
