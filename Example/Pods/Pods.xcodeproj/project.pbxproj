@@ -166,11 +166,11 @@
 		813AD30AFD7A276A04AA42BAFAC8BE06 /* JsonPatchSwift */ = {
 			isa = PBXGroup;
 			children = (
-				82A598291FEF7FD800140BCD /* Constants.swift */,
 				A391258FD042BA6B789E0F3C6C118FB4 /* JSONPatchOperation.swift */,
 				82A5982B1FEF803500140BCD /* JSONPatch.swift */,
 				82A5982D1FEF805A00140BCD /* JSONPatcher.swift */,
 				9685448CE77F78EF832F6FE6C8C12719 /* JSONPointer.swift */,
+				82A598291FEF7FD800140BCD /* Constants.swift */,
 				E21FD592D0F233EF550E56C2F7C778DF /* Support Files */,
 			);
 			name = JsonPatchSwift;

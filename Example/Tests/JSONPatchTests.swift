@@ -9,7 +9,7 @@ class JPSJsonPatchTests: XCTestCase {
         do {
             let json = JSON(parseJSON: jsonString)
             let jsonPatch = try JSONPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let resultingJSON = try JSONPatcher.applyPatch(jsonPatch, toJson: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
         } catch {

@@ -1,6 +1,8 @@
 import SwiftyJSON
 
-/// Representation of a JSON Patch
+/**
+ Representation of a JSON Patch
+ */
 public struct JSONPatch {
     
     let operations: [JSONPatchOperation]

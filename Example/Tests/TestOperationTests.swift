@@ -11,7 +11,7 @@ class JPSTestOperationTests: XCTestCase {
         do {
             let json = JSON(parseJSON: jsonString)
             let jsonPatch = try JSONPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let resultingJSON = try JSONPatcher.applyPatch(jsonPatch, toJson: json)
             XCTAssertEqual(json, resultingJSON)
         } catch {
             XCTFail(error.localizedDescription)
@@ -22,7 +22,7 @@ class JPSTestOperationTests: XCTestCase {
         do {
             let json = JSON(parseJSON: jsonString)
             let jsonPatch = try JSONPatch(jsonPatchString)
-            XCTAssertThrowsError(try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json))
+            XCTAssertThrowsError(try JSONPatcher.applyPatch(jsonPatch, toJson: json))
         } catch {
             XCTFail(error.localizedDescription)
         }

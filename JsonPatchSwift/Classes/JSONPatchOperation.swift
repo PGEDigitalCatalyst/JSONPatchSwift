@@ -1,29 +1,26 @@
 
 import SwiftyJSON
 
-/// RFC 6902 compliant JavaScript Object Notation (JSON) Patch operation implementation, see https://tools.ietf.org/html/rfc6902#page-4.
+/**
+ RFC 6902 compliant JavaScript Object Notation (JSON) Patch operation implementation.
+ see https://tools.ietf.org/html/rfc6902#page-4.
+ */
 public struct JSONPatchOperation {
+    
+    public let type: OperationType
+    public let pointer: JSONPointer
+    public let value: JSON
+    public let from: JSONPointer?
     
     /// Operation types as stated in https://tools.ietf.org/html/rfc6902#page-4.
     public enum OperationType: String {
-        /** add: The `add` operation. */
-        case add = "add"
-        /** remove: The `remove` operation. */
-        case remove = "remove"
-        /** replace: The `replace` operation. */
-        case replace = "replace"
-        /** move: The `move` operation. */
-        case move = "move"
-        /** copy: The `copy` operation. */
-        case copy = "copy"
-        /** test: The `test` operation. */
-        case test = "test"
+        case add
+        case remove
+        case replace
+        case move
+        case copy
+        case test
     }
-    
-    let type: OperationType
-    let pointer: JSONPointer
-    let value: JSON
-    let from: JSONPointer?
 }
 
 extension JSONPatchOperation: Equatable {
