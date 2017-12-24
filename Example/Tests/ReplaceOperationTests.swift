@@ -51,6 +51,7 @@ class JPSReplaceOperationTests: XCTestCase {
         let jsonPatch = """
         {"op": "replace", "path": "/foo/1"}
         """
+        // missing "value"
         XCTAssertThrowsError(try JPSJsonPatch(jsonPatch))
     }
 }

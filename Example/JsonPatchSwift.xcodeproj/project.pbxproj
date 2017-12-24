@@ -79,11 +79,11 @@
 				82A5982F1FEF86AE00140BCD /* AddOperationTests.swift */,
 				82A5983B1FEF872700140BCD /* RemoveOperationTests.swift */,
 				82A5983D1FEF873400140BCD /* ReplaceOperationTests.swift */,
+				82A598391FEF871800140BCD /* MoveOperationTests.swift */,
 				82A598311FEF86B900140BCD /* CopyOperationTests.swift */,
 				82A598331FEF86CB00140BCD /* DocumentStructureTests.swift */,
 				82A598351FEF86E900140BCD /* JSONPatchTests.swift */,
 				82A598371FEF870400140BCD /* JSONPointerTests.swift */,
-				82A598391FEF871800140BCD /* MoveOperationTests.swift */,
 				82A5983F1FEF874300140BCD /* TestOperationTests.swift */,
 			);
 			path = Tests;
