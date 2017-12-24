@@ -1,0 +1,22 @@
+{
+  "name": "JsonPatchSwift",
+  "version": "0.1.0",
+  "homepage": "placeholder",
+  "summary": "A short description of JsonPatchSwift.",
+  "authors": {
+    "BrandonNott": "brandon.nott@levvel.io"
+  },
+  "source": {
+    "git": "https://github.com/BrandonNott/JsonPatchSwift.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "JsonPatchSwift/Classes/**/*",
+  "dependencies": {
+    "SwiftyJSON": [
+
+    ]
+  }
+}

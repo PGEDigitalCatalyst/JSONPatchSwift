@@ -1,0 +1,6 @@
+framework module Pods_JsonPatchSwift_Tests {
+  umbrella header "Pods-JsonPatchSwift_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
