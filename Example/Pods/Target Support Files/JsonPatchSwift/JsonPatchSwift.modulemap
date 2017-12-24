@@ -1,0 +1,6 @@
+framework module JsonPatchSwift {
+  umbrella header "JsonPatchSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}
