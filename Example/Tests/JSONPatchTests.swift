@@ -8,7 +8,7 @@ class JPSJsonPatchTests: XCTestCase {
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             let resultingJSON = try JSONPatcher.apply(patch: jsonPatch, to: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
@@ -75,9 +75,9 @@ class JPSJsonPatchTests: XCTestCase {
         {"op": "test", "path": "/a/b/c", "value": "foo"}
         """
         do {
-            let jsonPatch0 = try JSONPatch(jsonPatchString)
+            let jsonPatch0 = try JSONPatch(jsonString: jsonPatchString)
             let json = JSON(parseJSON: jsonPatchString)
-            let jsonPatch1 = try JSONPatch(json)
+            let jsonPatch1 = try JSONPatch(json: json)
             XCTAssertEqual(jsonPatch0, jsonPatch1)
         } catch {
             XCTFail(error.localizedDescription)

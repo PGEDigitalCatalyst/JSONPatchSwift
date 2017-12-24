@@ -13,7 +13,7 @@ class JPSDocumentStructureTests: XCTestCase {
         ]
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 1)
         } catch {
             XCTFail(error.localizedDescription)
@@ -29,7 +29,7 @@ class JPSDocumentStructureTests: XCTestCase {
         ]
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 3)
         } catch {
             XCTFail(error.localizedDescription)
@@ -48,7 +48,7 @@ class JPSDocumentStructureTests: XCTestCase {
         ]
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 6)
             XCTAssertEqual(jsonPatch.operations[0].type, JSONPatchOperation.OperationType.add)
             XCTAssertEqual(jsonPatch.operations[1].type, JSONPatchOperation.OperationType.remove)
@@ -64,7 +64,7 @@ class JPSDocumentStructureTests: XCTestCase {
     // This is about the JSON format in general.
     func testJsonPatchRejectsInvalidJsonFormat() {
         let jsonPatchString = "!#€%&/()*^*_:;;:;_poawolwasnndaw"
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
 
     func testJsonPatchRejectsMissingOperation() {
@@ -72,7 +72,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"path": "/a/b/c", "value": "foo"}
         """
         // missing "operation"
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
     
     func testJsonPatchRejectsMissingPath() {
@@ -80,7 +80,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "add", "value": "foo"}
         """
         // missing "path"
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
     
     func testJsonPatchRejectsMissingValue() {
@@ -88,7 +88,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "add", "path": "/foo"}
         """
         // missing "value"
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
     
     func testJsonPatchSavesValue() {
@@ -98,7 +98,7 @@ class JPSDocumentStructureTests: XCTestCase {
         ]
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 1)
             XCTAssertEqual(jsonPatch.operations[0].value.string, "foo")
         } catch {
@@ -107,18 +107,18 @@ class JPSDocumentStructureTests: XCTestCase {
     }
     
     func testJsonPatchRejectsEmptyArray() {
-        XCTAssertThrowsError(try JSONPatch("[]"))
+        XCTAssertThrowsError(try JSONPatch(jsonString: "[]"))
     }
     
     func testInvalidJsonGetsRejected() {
-        XCTAssertThrowsError(try JSONPatch("{op:foo}"))
+        XCTAssertThrowsError(try JSONPatch(jsonString: "{op:foo}"))
     }
     
     func testInvalidOperationsAreRejected() {
         let jsonPatchString = """
         {"op": "foo", "path": "/a/b"}
         """
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
     
     // JSON Pointer: RFC6901
@@ -128,7 +128,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "add", "path": "foo", "value": "foo"}
         """
         // invalid path
-        XCTAssertThrowsError(try JSONPatch(jsonPatchString))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatchString))
     }
     
     func testIfAdditionalElementsAreIgnored() {
@@ -136,7 +136,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "test", "path": "/a/b/c", "value": "foo", "additionalParameter": "foo"}
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 1)
             XCTAssertEqual(jsonPatch.operations[0].type, JSONPatchOperation.OperationType.test)
         } catch {
@@ -149,7 +149,7 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "remove", "path": "/a/b/c", "value": "foo", "additionalParameter": "foo"}
         """
         do {
-            let jsonPatch = try JSONPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
             XCTAssertEqual(jsonPatch.operations.count, 1)
             XCTAssertEqual(jsonPatch.operations[0].type, JSONPatchOperation.OperationType.remove)
         } catch {
@@ -170,8 +170,8 @@ class JPSDocumentStructureTests: XCTestCase {
         ]
         """
         do {
-            let jsonPatch0 = try JSONPatch(jsonPatchString0)
-            let jsonPatch1 = try JSONPatch(jsonPatchString1)
+            let jsonPatch0 = try JSONPatch(jsonString: jsonPatchString0)
+            let jsonPatch1 = try JSONPatch(jsonString: jsonPatchString1)
             XCTAssertNotEqual(jsonPatch0, jsonPatch1)
         } catch {
             XCTFail(error.localizedDescription)
@@ -186,8 +186,8 @@ class JPSDocumentStructureTests: XCTestCase {
         {"op": "remove", "path": "/a/b/c"}
         """
         do {
-            let jsonPatch0 = try JSONPatch(jsonPatchString0)
-            let jsonPatch1 = try JSONPatch(jsonPatchString1)
+            let jsonPatch0 = try JSONPatch(jsonString: jsonPatchString0)
+            let jsonPatch1 = try JSONPatch(jsonString: jsonPatchString1)
             XCTAssertNotEqual(jsonPatch0, jsonPatch1)
         } catch {
             XCTFail(error.localizedDescription)

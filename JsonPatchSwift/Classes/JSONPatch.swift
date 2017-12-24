@@ -18,19 +18,19 @@ public struct JSONPatch {
      notify failed initialization.
      - Returns: a `JSONPatch` representation of the given SwiftJSON object
      */
-    public init(_ patch: JSON) throws {
+    public init(json: JSON) throws {
         
         // Check if there is an array of a dictionary as root element. Both are valid JSON patch documents.
-        if patch.type == .dictionary {
-            self.operations = [try JSONPatch.extractOperationFromJson(patch)]
+        if json.type == .dictionary {
+            self.operations = [try JSONPatch.extractOperationFromJson(json)]
             
-        } else if patch.type == .array {
-            guard 0 < patch.count else {
+        } else if json.type == .array {
+            guard 0 < json.count else {
                 throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchWithEmptyError)
             }
             var operationArray = [JSONPatchOperation]()
-            for i in 0..<patch.count {
-                let operation = patch[i]
+            for i in 0..<json.count {
+                let operation = json[i]
                 operationArray.append(try JSONPatch.extractOperationFromJson(operation))
             }
             self.operations = operationArray
@@ -51,15 +51,15 @@ public struct JSONPatch {
      - throws: can throw any error from `JSONPatch.JPSJsonPatchInitialisationError` to notify failed initialization.
      - returns: a `JSONPatch` representation of the given JSON Patch String.
      */
-    public init(_ patch: String) throws {
-        let data = patch.data(using: .utf8)!
+    public init(jsonString: String) throws {
+        let data = jsonString.data(using: .utf8)!
         let json: JSON
         do {
             json = try JSON(data: data, options: .allowFragments)
         } catch {
             throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: error.localizedDescription)
         }
-        try self.init(json)
+        try self.init(json: json)
     }
     
     /// Possible errors thrown by the init function.
