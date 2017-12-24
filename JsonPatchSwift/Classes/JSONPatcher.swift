@@ -14,9 +14,9 @@ public struct JSONPatcher {
      notify about failed operations.
      - Returns: A new `JSON` containing the given `JSON` with the patch applied.
      */
-    public static func applyPatch(_ jsonPatch: JSONPatch, toJson json: JSON) throws -> JSON {
+    public static func apply(patch: JSONPatch, to json: JSON) throws -> JSON {
         var tempJson = json
-        for operation in jsonPatch.operations {
+        for operation in patch.operations {
             switch operation.type {
             case .add: tempJson = try JSONPatcher.add(operation, toJson: tempJson)
             case .remove: tempJson = try JSONPatcher.remove(operation, toJson: tempJson)
