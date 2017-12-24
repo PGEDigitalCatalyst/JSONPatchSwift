@@ -26,7 +26,7 @@ class JPSAddOperationTests: XCTestCase {
             let json = JSON(parseJSON: jsonString)
             let jsonPatch = try! JPSJsonPatch(jsonPatchString)
             let _ = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
-            XCTFail("Unreachable code. Should have raised an error, because the array index is out of bounds.")
+            XCTFail("Should have raised an error.")
         } catch {
             // pass
         }

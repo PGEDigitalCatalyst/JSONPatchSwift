@@ -35,7 +35,6 @@
 		82A5983B1FEF872700140BCD /* RemoveOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveOperationTests.swift; sourceTree = "<group>"; };
 		82A5983D1FEF873400140BCD /* ReplaceOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaceOperationTests.swift; sourceTree = "<group>"; };
 		82A5983F1FEF874300140BCD /* TestOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestOperationTests.swift; sourceTree = "<group>"; };
-		CBF59D7488A13B3BE6CA8965 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		CC6F19ADF1399D873FF3FC95 /* JsonPatchSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = JsonPatchSwift.podspec; path = ../JsonPatchSwift.podspec; sourceTree = "<group>"; };
 		D6091FC023A8AD91A89E3B95 /* Pods-JsonPatchSwift_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JsonPatchSwift_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JsonPatchSwift_Tests/Pods-JsonPatchSwift_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F5A4FB8AE5D3DDFA2E273B97 /* Pods-JsonPatchSwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JsonPatchSwift_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JsonPatchSwift_Tests/Pods-JsonPatchSwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -78,13 +77,13 @@
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				82A5982F1FEF86AE00140BCD /* AddOperationTests.swift */,
+				82A5983B1FEF872700140BCD /* RemoveOperationTests.swift */,
+				82A5983D1FEF873400140BCD /* ReplaceOperationTests.swift */,
 				82A598311FEF86B900140BCD /* CopyOperationTests.swift */,
 				82A598331FEF86CB00140BCD /* DocumentStructureTests.swift */,
 				82A598351FEF86E900140BCD /* JSONPatchTests.swift */,
 				82A598371FEF870400140BCD /* JSONPointerTests.swift */,
 				82A598391FEF871800140BCD /* MoveOperationTests.swift */,
-				82A5983B1FEF872700140BCD /* RemoveOperationTests.swift */,
-				82A5983D1FEF873400140BCD /* ReplaceOperationTests.swift */,
 				82A5983F1FEF874300140BCD /* TestOperationTests.swift */,
 			);
 			path = Tests;
@@ -103,7 +102,6 @@
 			children = (
 				CC6F19ADF1399D873FF3FC95 /* JsonPatchSwift.podspec */,
 				5D683E51902FDA4BEC8DF8CE /* README.md */,
-				CBF59D7488A13B3BE6CA8965 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
