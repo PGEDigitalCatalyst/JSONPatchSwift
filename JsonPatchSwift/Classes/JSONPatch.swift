@@ -1,18 +1,5 @@
 import SwiftyJSON
 
-func == (lhs: JPSJsonPatch, rhs: JPSJsonPatch) -> Bool {
-    
-    guard lhs.operations.count == rhs.operations.count else { return false }
-    
-    for i in 0..<lhs.operations.count {
-        if !(lhs.operations[i] == rhs.operations[i]) {
-            return false
-        }
-    }
-    
-    return true
-}
-
 /// Representation of a JSON Patch
 public struct JPSJsonPatch {
     
@@ -82,6 +69,18 @@ public struct JPSJsonPatch {
     }
 }
 
+extension JPSJsonPatch: Equatable {
+    
+    public static func ==(lhs: JPSJsonPatch, rhs: JPSJsonPatch) -> Bool {
+        guard lhs.operations.count == rhs.operations.count else { return false }
+        for index in 0..<lhs.operations.count {
+            if !(lhs.operations[index] == rhs.operations[index]) {
+                return false
+            }
+        }
+        return true
+    }
+}
 
 // MARK: - Private functions
 extension JPSJsonPatch {
