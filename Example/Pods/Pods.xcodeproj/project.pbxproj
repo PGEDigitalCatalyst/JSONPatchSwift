@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		248A6B83A76A3281DBA9FF6251558F6F /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A391258FD042BA6B789E0F3C6C118FB4 /* Operation.swift */; };
+		248A6B83A76A3281DBA9FF6251558F6F /* JSONPatchOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A391258FD042BA6B789E0F3C6C118FB4 /* JSONPatchOperation.swift */; };
 		347AE9BDBCF8B0C8C2EEC133374D6ACD /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE506ECE97701EBA44FDBFF401C1A04 /* SwiftyJSON.swift */; };
 		544B4B7863E8E3090E7315E9B5D33CFD /* SwiftyJSON-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B9BBA8F5B33E56C38F5546432F66B7 /* SwiftyJSON-dummy.m */; };
 		771EC1F5B1BA1B71E38F45D1B533DCE1 /* Pods-JsonPatchSwift_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D2CE56551C368F1DE7DA546B4E01810 /* Pods-JsonPatchSwift_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -72,7 +72,7 @@
 		90E159A34DC8ABECFD92A0EC5746B256 /* Pods-JsonPatchSwift_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-JsonPatchSwift_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9685448CE77F78EF832F6FE6C8C12719 /* JSONPointer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JSONPointer.swift; path = JsonPatchSwift/Classes/JSONPointer.swift; sourceTree = "<group>"; };
-		A391258FD042BA6B789E0F3C6C118FB4 /* Operation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Operation.swift; path = JsonPatchSwift/Classes/Operation.swift; sourceTree = "<group>"; };
+		A391258FD042BA6B789E0F3C6C118FB4 /* JSONPatchOperation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JSONPatchOperation.swift; path = JsonPatchSwift/Classes/JSONPatchOperation.swift; sourceTree = "<group>"; };
 		A4E8B98BB862EFECF5F41ACECA0555BB /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		B156C8ECA82AB5FD19A9B4763CDECD16 /* Pods-JsonPatchSwift_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-JsonPatchSwift_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		B64C47DDFA105258D3B2A2D6D6D73BA9 /* Pods_JsonPatchSwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JsonPatchSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,7 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				82A598291FEF7FD800140BCD /* Constants.swift */,
-				A391258FD042BA6B789E0F3C6C118FB4 /* Operation.swift */,
+				A391258FD042BA6B789E0F3C6C118FB4 /* JSONPatchOperation.swift */,
 				82A5982B1FEF803500140BCD /* JSONPatch.swift */,
 				82A5982D1FEF805A00140BCD /* JSONPatcher.swift */,
 				9685448CE77F78EF832F6FE6C8C12719 /* JSONPointer.swift */,
@@ -364,7 +364,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				248A6B83A76A3281DBA9FF6251558F6F /* Operation.swift in Sources */,
+				248A6B83A76A3281DBA9FF6251558F6F /* JSONPatchOperation.swift in Sources */,
 				82A5982E1FEF805A00140BCD /* JSONPatcher.swift in Sources */,
 				BAC1C7F0A0771460CB7D82E551B9F016 /* JsonPatchSwift-dummy.m in Sources */,
 				F35C329E619020B5D8BD0746AEF3F059 /* JSONPointer.swift in Sources */,

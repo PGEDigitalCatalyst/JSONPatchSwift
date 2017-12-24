@@ -10,7 +10,7 @@ class JPSTestOperationTests: XCTestCase {
     private func testTestPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonPatchString)
             let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
             XCTAssertEqual(json, resultingJSON)
         } catch {
@@ -21,7 +21,7 @@ class JPSTestOperationTests: XCTestCase {
     private func testTestPatchFailOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonPatchString)
             XCTAssertThrowsError(try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json))
         } catch {
             XCTFail(error.localizedDescription)

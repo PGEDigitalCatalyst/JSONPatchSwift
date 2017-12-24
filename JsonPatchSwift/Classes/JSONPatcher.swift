@@ -4,23 +4,23 @@ import SwiftyJSON
 public struct JPSJsonPatcher {
     
     /**
-     Applies a given `JPSJsonPatch` to a `JSON`.
+     Applies a given `JSONPatch` to a `JSON`.
      - Parameter jsonPatch: the jsonPatch to apply
      - Parameter json: the json to apply the patch to
      - Throws: can throw any error from `JPSJsonPatcher.JPSJsonPatcherApplyError` to
      notify about failed operations.
      - Returns: A new `JSON` containing the given `JSON` with the patch applied.
      */
-    public static func applyPatch(_ jsonPatch: JPSJsonPatch, toJson json: JSON) throws -> JSON {
+    public static func applyPatch(_ jsonPatch: JSONPatch, toJson json: JSON) throws -> JSON {
         var tempJson = json
         for operation in jsonPatch.operations {
             switch operation.type {
-            case .Add: tempJson = try JPSJsonPatcher.add(operation, toJson: tempJson)
-            case .Remove: tempJson = try JPSJsonPatcher.remove(operation, toJson: tempJson)
-            case .Replace: tempJson = try JPSJsonPatcher.replace(operation, toJson: tempJson)
-            case .Move: tempJson = try JPSJsonPatcher.move(operation, toJson: tempJson)
-            case .Copy: tempJson = try JPSJsonPatcher.copy(operation, toJson: tempJson)
-            case .Test: tempJson = try JPSJsonPatcher.test(operation, toJson: tempJson)
+            case .add: tempJson = try JPSJsonPatcher.add(operation, toJson: tempJson)
+            case .remove: tempJson = try JPSJsonPatcher.remove(operation, toJson: tempJson)
+            case .replace: tempJson = try JPSJsonPatcher.replace(operation, toJson: tempJson)
+            case .move: tempJson = try JPSJsonPatcher.move(operation, toJson: tempJson)
+            case .copy: tempJson = try JPSJsonPatcher.copy(operation, toJson: tempJson)
+            case .test: tempJson = try JPSJsonPatcher.test(operation, toJson: tempJson)
             }
         }
         return tempJson
@@ -40,7 +40,7 @@ public struct JPSJsonPatcher {
 
 // MARK: - Private functions
 extension JPSJsonPatcher {
-    private static func add(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func add(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         
         guard 0 < operation.pointer.pointerValue.count else {
             return operation.value
@@ -63,9 +63,9 @@ extension JPSJsonPatcher {
         }
     }
     
-    private static func remove(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func remove(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         return try JPSJsonPatcher.applyOperation(json, pointer: operation.pointer) {
-            (traversedJson: JSON, pointer: JPSJsonPointer) in
+            (traversedJson: JSON, pointer: JSONPointer) in
             var newJson = traversedJson
             if var dictionary = traversedJson.dictionaryObject, let key = pointer.pointerValue.first as? String {
                 dictionary.removeValue(forKey: key)
@@ -79,9 +79,9 @@ extension JPSJsonPatcher {
         }
     }
     
-    private static func replace(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func replace(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         return try JPSJsonPatcher.applyOperation(json, pointer: operation.pointer) {
-            (traversedJson: JSON, pointer: JPSJsonPointer) in
+            (traversedJson: JSON, pointer: JSONPointer) in
             var newJson = traversedJson
             if var dictionary = traversedJson.dictionaryObject, let key = pointer.pointerValue.first as? String {
                 dictionary[key] = operation.value.object
@@ -95,11 +95,11 @@ extension JPSJsonPatcher {
         }
     }
     
-    private static func move(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func move(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         var resultJson = json
         
         try JPSJsonPatcher.applyOperation(json, pointer: operation.from!) {
-            (traversedJson: JSON, pointer: JPSJsonPointer) in
+            (traversedJson: JSON, pointer: JSONPointer) in
             
             // From: http://tools.ietf.org/html/rfc6902#section-4.3
             //    This operation is functionally identical to a "remove" operation for
@@ -107,7 +107,7 @@ extension JPSJsonPatcher {
             //    location with the replacement value.
             
             // remove
-            let removeOperation = JPSOperation(type: JPSOperation.JPSOperationType.Remove, pointer: operation.from!, value: resultJson, from: operation.from)
+            let removeOperation = JSONPatchOperation(type: JSONPatchOperation.OperationType.remove, pointer: operation.from!, value: resultJson, from: operation.from)
             resultJson = try JPSJsonPatcher.remove(removeOperation, toJson: resultJson)
             
             // add
@@ -115,7 +115,7 @@ extension JPSJsonPatcher {
             if traversedJson.type == .array, let indexString = pointer.pointerValue.first as? String, let index = Int(indexString) {
                 jsonToAdd = traversedJson[index]
             }
-            let addOperation = JPSOperation(type: JPSOperation.JPSOperationType.Add, pointer: operation.pointer, value: jsonToAdd, from: operation.from)
+            let addOperation = JSONPatchOperation(type: JSONPatchOperation.OperationType.add, pointer: operation.pointer, value: jsonToAdd, from: operation.from)
             resultJson = try JPSJsonPatcher.add(addOperation, toJson: resultJson)
             
             return traversedJson
@@ -124,16 +124,16 @@ extension JPSJsonPatcher {
         return resultJson
     }
     
-    private static func copy(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func copy(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         var resultJson = json
         
         try JPSJsonPatcher.applyOperation(json, pointer: operation.from!) {
-            (traversedJson: JSON, pointer: JPSJsonPointer) in
+            (traversedJson: JSON, pointer: JSONPointer) in
             var jsonToAdd = traversedJson[pointer.pointerValue]
             if traversedJson.type == .array, let indexString = pointer.pointerValue.first as? String, let index = Int(indexString) {
                 jsonToAdd = traversedJson[index]
             }
-            let addOperation = JPSOperation(type: JPSOperation.JPSOperationType.Add, pointer: operation.pointer, value: jsonToAdd, from: operation.from)
+            let addOperation = JSONPatchOperation(type: JSONPatchOperation.OperationType.add, pointer: operation.pointer, value: jsonToAdd, from: operation.from)
             resultJson = try JPSJsonPatcher.add(addOperation, toJson: resultJson)
             return traversedJson
         }
@@ -142,9 +142,9 @@ extension JPSJsonPatcher {
         
     }
     
-    private static func test(_ operation: JPSOperation, toJson json: JSON) throws -> JSON {
+    private static func test(_ operation: JSONPatchOperation, toJson json: JSON) throws -> JSON {
         return try JPSJsonPatcher.applyOperation(json, pointer: operation.pointer) {
-            (traversedJson: JSON, pointer: JPSJsonPointer) in
+            (traversedJson: JSON, pointer: JSONPointer) in
             let jsonToValidate = traversedJson[pointer.pointerValue]
             guard jsonToValidate == operation.value else {
                 throw JPSJsonPatcherApplyError.ValidationError(message: JPSConstants.JsonPatch.ErrorMessages.ValidationError)
@@ -153,7 +153,7 @@ extension JPSJsonPatcher {
         }
     }
     
-    private static func applyOperation(_ json: JSON?, pointer: JPSJsonPointer, operation: ((JSON, JPSJsonPointer) throws -> JSON)) throws -> JSON {
+    private static func applyOperation(_ json: JSON?, pointer: JSONPointer, operation: ((JSON, JSONPointer) throws -> JSON)) throws -> JSON {
         guard let newJson = json else {
             throw JPSJsonPatcherApplyError.InvalidJson
         }
@@ -161,11 +161,11 @@ extension JPSJsonPatcher {
             return try operation(newJson, pointer)
         } else {
             if var arr = newJson.array, let indexString = pointer.pointerValue.first as? String, let index = Int(indexString) {
-                arr[index] = try applyOperation(arr[index], pointer: JPSJsonPointer.traverse(pointer), operation: operation)
+                arr[index] = try applyOperation(arr[index], pointer: JSONPointer.traverse(pointer), operation: operation)
                 return JSON(arr)
             }
             if var dictionary = newJson.dictionary, let key = pointer.pointerValue.first as? String {
-                dictionary[key] = try applyOperation(dictionary[key], pointer: JPSJsonPointer.traverse(pointer), operation: operation)
+                dictionary[key] = try applyOperation(dictionary[key], pointer: JSONPointer.traverse(pointer), operation: operation)
                 return JSON(dictionary)
             }
         }

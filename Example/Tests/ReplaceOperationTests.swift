@@ -11,7 +11,7 @@ class JPSReplaceOperationTests: XCTestCase {
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
+            let jsonPatch = try JSONPatch(jsonPatchString)
             let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
@@ -52,6 +52,6 @@ class JPSReplaceOperationTests: XCTestCase {
         {"op": "replace", "path": "/foo/1"}
         """
         // missing "value"
-        XCTAssertThrowsError(try JPSJsonPatch(jsonPatch))
+        XCTAssertThrowsError(try JSONPatch(jsonPatch))
     }
 }

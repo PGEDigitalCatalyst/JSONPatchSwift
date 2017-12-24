@@ -13,21 +13,21 @@ public enum JPSJsonPointerError: Error {
 }
 
 /// RFC 6901 compliant JavaScript Object Notation (JSON) Pointer implementation.
-public struct JPSJsonPointer {
+public struct JSONPointer {
     let rawValue: String
     let pointerValue: [JSONSubscriptType]
 }
 
-extension JPSJsonPointer {
+extension JSONPointer {
     
     /**
-     Initializes a new `JPSJsonPointer` based on a given String representation.
+     Initializes a new `JSONPointer` based on a given String representation.
      
      - Parameter rawValue: A String representing a valid JSON pointer, see https://tools.ietf.org/html/rfc6901.
      
-     - Throws: can throw any error from `JPSJsonPointer.JPSJsonPointerError` to notify failed initialization.
+     - Throws: can throw any error from `JSONPointer.JPSJsonPointerError` to notify failed initialization.
      
-     - Returns: a `JPSJsonPointer` representation of the given JSON pointer string.
+     - Returns: a `JSONPointer` representation of the given JSON pointer string.
      */
     public init(rawValue: String) throws {
         guard rawValue.isEmpty || rawValue.contains(JPSConstants.JsonPointer.Delimiter) else {
@@ -48,9 +48,15 @@ extension JPSJsonPointer {
     
 }
 
-extension JPSJsonPointer {
-    static func traverse(_ pointer: JPSJsonPointer) -> JPSJsonPointer {
+extension JSONPointer {
+    static func traverse(_ pointer: JSONPointer) -> JSONPointer {
         let pointerValueWithoutFirstElement = Array(pointer.rawValue.components(separatedBy: JPSConstants.JsonPointer.Delimiter).dropFirst().dropFirst()).joined(separator: JPSConstants.JsonPointer.Delimiter)
-        return try! JPSJsonPointer(rawValue: JPSConstants.JsonPointer.Delimiter + pointerValueWithoutFirstElement)
+        return try! JSONPointer(rawValue: JPSConstants.JsonPointer.Delimiter + pointerValueWithoutFirstElement)
+    }
+}
+
+extension JSONPointer: Equatable {
+    public static func ==(lhs: JSONPointer, rhs: JSONPointer) -> Bool {
+        return lhs.rawValue == rhs.rawValue
     }
 }
