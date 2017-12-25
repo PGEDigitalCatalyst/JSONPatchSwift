@@ -5,6 +5,12 @@ public struct JSONPatch {
     
     public let operations: [JSONPatchOperation]
     
+    public init(jsonString: String) throws {
+        guard let data = jsonString.data(using: .utf8) else { throw JSONPatchError.badStringEncoding }
+        let json = try JSON(data: data, options: .allowFragments)
+        try self.init(json: json)
+    }
+    
     public init(json: JSON) throws {
         switch json.type {
         case .dictionary:
@@ -15,25 +21,6 @@ public struct JSONPatch {
         default:
             throw JSONPatchError.invalidRootElement
         }
-    }
-    
-    public init(jsonString: String) throws {
-        guard let data = jsonString.data(using: .utf8) else { throw JSONPatchError.badStringEncoding }
-        let json = try JSON(data: data, options: .allowFragments)
-        try self.init(json: json)
-    }
-    
-    public enum JSONPatchError: Error {
-        case emptyPatchArray
-        case invalidRootElement
-        case badStringEncoding
-        case missingOperationElement
-        case missingPathElement
-        case invalidOperation
-        /** InvalidJsonFormat: The given String is not a valid JSON. */
-        case InvalidJsonFormat(message: String?)
-        /** InvalidPatchFormat: The given Patch is invalid (e.g. missing mandatory parameters). See error message for details. */
-        case InvalidPatchFormat(message: String?)
     }
 }
 
@@ -50,40 +37,36 @@ extension JSONPatch: Equatable {
     }
 }
 
-// MARK: - Private functions
+
 extension JSONPatch {
     
+    // MARK: - Private functions
+    
+    private enum Parameter: String {
+        case op
+        case path
+        case value
+        case from
+    }
+    
     private static func extractOperation(from json: JSON) throws -> JSONPatchOperation {
+        guard let operation = json[Parameter.op.rawValue].string else { throw JSONPatchError.missingOperationElement }
+        guard let path = json[Parameter.path.rawValue].string else { throw JSONPatchError.missingPathElement }
+        guard let operationType = JSONPatchOperation.OperationType(rawValue: operation) else { throw JSONPatchError.invalidOperation }
         
-        // The elements 'op' and 'path' are mandatory.
-        guard let operation = json[JPSConstants.JsonPatch.Parameter.Op].string else {
-            throw JSONPatchError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.OpElementNotFound)
-        }
-        guard let path = json[JPSConstants.JsonPatch.Parameter.Path].string else {
-            throw JSONPatchError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PathElementNotFound)
-        }
-        guard let operationType = JSONPatchOperation.OperationType(rawValue: operation) else {
-            throw JSONPatchError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.InvalidOperation)
-        }
-        
-        // 'from' element mandatory for .move, .copy operations
         var from: JSONPointer?
-        if operationType == .move || operationType == .copy {
-            guard let fromValue = json[JPSConstants.JsonPatch.Parameter.From].string else {
-                throw JSONPatchError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.FromElementNotFound)
-            }
+        if (operationType == .move || operationType == .copy) {
+            // 'from' element mandatory for .move, .copy operations
+            guard let fromValue = json[Parameter.from.rawValue].string else { throw JSONPatchError.missingFromElement }
             from = try JSONPointer(rawValue: fromValue)
         }
         
+        let value = json[Parameter.value.rawValue]
         // 'value' element mandatory for .add, .replace operations
-        let value = json[JPSConstants.JsonPatch.Parameter.Value]
         // counterintuitive null check: https://github.com/SwiftyJSON/SwiftyJSON/issues/205
-        if (operationType == .add || operationType == .replace) && value.null != nil {
-            throw JSONPatchError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.ValueElementNotFound)
-        }
+        if (operationType == .add || operationType == .replace) && (value.null != nil) { throw JSONPatchError.missingValueElement }
         
         let pointer = try JSONPointer(rawValue: path)
         return JSONPatchOperation(type: operationType, pointer: pointer, value: value, from: from)
     }
-    
 }

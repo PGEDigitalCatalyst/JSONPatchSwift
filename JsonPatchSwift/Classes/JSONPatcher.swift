@@ -20,22 +20,12 @@ public struct JSONPatcher {
         }
         return tempJson
     }
-    
-    /// Possible errors thrown by the applyPatch function.
-    public enum JSONPatcherError: Error {
-        /** validationError: `test` operation did not succeed. At least one tested parameter does not match the expected result. */
-        case validationError
-        /** arrayIndexOutOfBounds: tried to add an element to an array position > array size + 1. See: http://tools.ietf.org/html/rfc6902#section-4.1 */
-        case arrayIndexOutOfBounds
-        /** invalidJSON: invalid `JSON` provided. */
-        case invalidJSON
-    }
 }
-
-// MARK: - Private functions
 
 extension JSONPatcher {
     
+    // MARK: - Private functions
+
     private static func add(_ operation: JSONPatchOperation, to json: JSON) throws -> JSON {
         guard !operation.pointer.pointerValue.isEmpty else { return operation.value }
         return try JSONPatcher.applyOperation(json, pointer: operation.pointer) { (traversedJson, pointer) -> JSON in
@@ -44,7 +34,7 @@ extension JSONPatcher {
                 jsonAsDictionary[key] = operation.value.object
                 newJson.object = jsonAsDictionary
             } else if var jsonAsArray = traversedJson.arrayObject, let indexString = pointer.pointerValue.first as? String, let index = Int(indexString) {
-                guard index <= jsonAsArray.count else { throw JSONPatcherError.arrayIndexOutOfBounds }
+                guard index <= jsonAsArray.count else { throw JSONPatchError.arrayIndexOutOfBounds }
                 jsonAsArray.insert(operation.value.object, at: index)
                 newJson.object = jsonAsArray
             }
@@ -105,7 +95,6 @@ extension JSONPatcher {
             
             return traversedJson
         }
-        
         return resultJson
     }
     
@@ -120,21 +109,19 @@ extension JSONPatcher {
             resultJson = try JSONPatcher.add(addOperation, to: resultJson)
             return traversedJson
         }
-        
         return resultJson
-        
     }
     
     private static func test(_ operation: JSONPatchOperation, to json: JSON) throws -> JSON {
         return try JSONPatcher.applyOperation(json, pointer: operation.pointer) { (traversedJson: JSON, pointer: JSONPointer) in
             let jsonToValidate = traversedJson[pointer.pointerValue]
-            guard jsonToValidate == operation.value else { throw JSONPatcherError.validationError }
+            guard jsonToValidate == operation.value else { throw JSONPatchError.testDidFail }
             return traversedJson
         }
     }
     
     private static func applyOperation(_ json: JSON?, pointer: JSONPointer, operation: ((JSON, JSONPointer) throws -> JSON)) throws -> JSON {
-        guard let newJson = json else { throw JSONPatcherError.invalidJSON }
+        guard let newJson = json else { throw JSONPatchError.invalidJSON }
         if pointer.pointerValue.count == 1 {
             return try operation(newJson, pointer)
         } else {
