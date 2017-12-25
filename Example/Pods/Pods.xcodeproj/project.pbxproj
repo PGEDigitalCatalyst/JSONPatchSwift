@@ -12,7 +12,6 @@
 		544B4B7863E8E3090E7315E9B5D33CFD /* SwiftyJSON-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B9BBA8F5B33E56C38F5546432F66B7 /* SwiftyJSON-dummy.m */; };
 		771EC1F5B1BA1B71E38F45D1B533DCE1 /* Pods-JsonPatchSwift_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D2CE56551C368F1DE7DA546B4E01810 /* Pods-JsonPatchSwift_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7DEA6D6FD98669CC2261FB304501DA29 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4E8B98BB862EFECF5F41ACECA0555BB /* Foundation.framework */; };
-		82A5982A1FEF7FD800140BCD /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A598291FEF7FD800140BCD /* Constants.swift */; };
 		82A5982C1FEF803500140BCD /* JSONPatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A5982B1FEF803500140BCD /* JSONPatch.swift */; };
 		82A5982E1FEF805A00140BCD /* JSONPatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A5982D1FEF805A00140BCD /* JSONPatcher.swift */; };
 		82A6EAE61FF09173002BAB9D /* JSONPatchError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A6EAE51FF09173002BAB9D /* JSONPatchError.swift */; };
@@ -64,7 +63,6 @@
 		7AE7A3D82FDB3C277980C4F8D81C86DD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D8124F6D1A0F71ABCB47A2A3F8FE9AA /* Pods-JsonPatchSwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-JsonPatchSwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		824B2D332987FB086E87B85BBB25965C /* JsonPatchSwift-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "JsonPatchSwift-umbrella.h"; sourceTree = "<group>"; };
-		82A598291FEF7FD800140BCD /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = JsonPatchSwift/Classes/Constants.swift; sourceTree = "<group>"; };
 		82A5982B1FEF803500140BCD /* JSONPatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSONPatch.swift; path = JsonPatchSwift/Classes/JSONPatch.swift; sourceTree = "<group>"; };
 		82A5982D1FEF805A00140BCD /* JSONPatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSONPatcher.swift; path = JsonPatchSwift/Classes/JSONPatcher.swift; sourceTree = "<group>"; };
 		82A6EAE51FF09173002BAB9D /* JSONPatchError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSONPatchError.swift; path = JsonPatchSwift/Classes/JSONPatchError.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 				82A6EAE51FF09173002BAB9D /* JSONPatchError.swift */,
 				A391258FD042BA6B789E0F3C6C118FB4 /* JSONPatchOperation.swift */,
 				9685448CE77F78EF832F6FE6C8C12719 /* JSONPointer.swift */,
-				82A598291FEF7FD800140BCD /* Constants.swift */,
 				E21FD592D0F233EF550E56C2F7C778DF /* Support Files */,
 			);
 			name = JsonPatchSwift;
@@ -372,7 +369,6 @@
 				BAC1C7F0A0771460CB7D82E551B9F016 /* JsonPatchSwift-dummy.m in Sources */,
 				F35C329E619020B5D8BD0746AEF3F059 /* JSONPointer.swift in Sources */,
 				82A5982C1FEF803500140BCD /* JSONPatch.swift in Sources */,
-				82A5982A1FEF7FD800140BCD /* Constants.swift in Sources */,
 				82A6EAE61FF09173002BAB9D /* JSONPatchError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

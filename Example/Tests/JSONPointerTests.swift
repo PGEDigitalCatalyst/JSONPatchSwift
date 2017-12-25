@@ -39,7 +39,7 @@ class JPSJsonPointerTests: XCTestCase {
     }
     
     func testIfPointerOnlyContainingDelimiterIsInvalid() {
-        XCTAssertThrowsError(try JSONPointer(rawValue: JPSConstants.JsonPointer.Delimiter))
+        XCTAssertThrowsError(try JSONPointer(rawValue: JSONPointer.delimiter))
     }
     
     func testForSeveralUnicodeCharacters() {
@@ -78,13 +78,13 @@ extension JPSJsonPointerTests {
         do {
             let jsonPointer1 = try JSONPointer(rawValue: "/~1")
             XCTAssertEqual(jsonPointer1.pointerValue.count, 1)
-            XCTAssertEqual(jsonPointer1.pointerValue.first as? String, JPSConstants.JsonPointer.Delimiter)
+            XCTAssertEqual(jsonPointer1.pointerValue.first as? String, JSONPointer.delimiter)
             let jsonPointer2 = try JSONPointer(rawValue: "/~0")
             XCTAssertEqual(jsonPointer2.pointerValue.count, 1)
-            XCTAssertEqual(jsonPointer2.pointerValue.first as? String, JPSConstants.JsonPointer.EscapeCharater)
+            XCTAssertEqual(jsonPointer2.pointerValue.first as? String, JSONPointer.escapeCharacter)
             let jsonPointer3 = try JSONPointer(rawValue: "/~01")
             XCTAssertEqual(jsonPointer3.pointerValue.count, 1)
-            XCTAssertEqual(jsonPointer3.pointerValue.first as? String, JPSConstants.JsonPointer.EscapedDelimiter)
+            XCTAssertEqual(jsonPointer3.pointerValue.first as? String, JSONPointer.escapedDelimiter)
             let jsonPointer4 = try JSONPointer(rawValue: "/~10")
             XCTAssertEqual(jsonPointer4.pointerValue.count, 1)
             XCTAssertEqual(jsonPointer4.pointerValue.first as? String, "/0")
@@ -93,12 +93,12 @@ extension JPSJsonPointerTests {
             XCTAssertEqual(jsonPointer5.pointerValue.first as? String, "/~")
             let jsonPointer6 = try JSONPointer(rawValue: "/~1/~0")
             XCTAssertEqual(jsonPointer6.pointerValue.count, 2)
-            XCTAssertEqual(jsonPointer6.pointerValue.first as? String, JPSConstants.JsonPointer.Delimiter)
-            XCTAssertEqual(jsonPointer6.pointerValue[1] as? String, JPSConstants.JsonPointer.EscapeCharater)
+            XCTAssertEqual(jsonPointer6.pointerValue.first as? String, JSONPointer.delimiter)
+            XCTAssertEqual(jsonPointer6.pointerValue[1] as? String, JSONPointer.escapeCharacter)
             let jsonPointer7 = try JSONPointer(rawValue: "/~0/~1")
             XCTAssertEqual(jsonPointer7.pointerValue.count, 2)
-            XCTAssertEqual(jsonPointer7.pointerValue.first as? String, JPSConstants.JsonPointer.EscapeCharater)
-            XCTAssertEqual(jsonPointer7.pointerValue[1] as? String, JPSConstants.JsonPointer.Delimiter)
+            XCTAssertEqual(jsonPointer7.pointerValue.first as? String, JSONPointer.escapeCharacter)
+            XCTAssertEqual(jsonPointer7.pointerValue[1] as? String, JSONPointer.delimiter)
         } catch {
             XCTFail(error.localizedDescription)
         }
