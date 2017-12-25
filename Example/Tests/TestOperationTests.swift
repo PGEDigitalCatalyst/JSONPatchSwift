@@ -5,7 +5,7 @@ import SwiftyJSON
 // http://tools.ietf.org/html/rfc6902#section-4.6
 // 4.  Operations
 // 4.6. test
-class JPSTestOperationTests: XCTestCase {
+class TestOperationTests: XCTestCase {
     
     private func testTestPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {

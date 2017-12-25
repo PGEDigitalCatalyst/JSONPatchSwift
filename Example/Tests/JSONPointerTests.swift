@@ -4,7 +4,7 @@ import XCTest
 
 // JavaScript Object Notation (JSON) Pointer
 // https://tools.ietf.org/html/rfc6901
-class JPSJsonPointerTests: XCTestCase {
+class JSONPointerTests: XCTestCase {
 
     // MARK: - chapter 3 tests
     
@@ -67,12 +67,6 @@ class JPSJsonPointerTests: XCTestCase {
     //    Note that JSON Pointers are specified in characters, not as bytes.
     
     
-}
-
-
-// MARK: - chapter 4 tests
-extension JPSJsonPointerTests {
-    
     // TODO: Validate these tests are meaningful
     func testIfTildeEscapedCharactersAreDecoded() {
         do {
@@ -120,12 +114,7 @@ extension JPSJsonPointerTests {
     //    Any error condition for which a specific action is not defined by the
     //    JSON Pointer application results in termination of evaluation.
     
-    
-}
 
-
-// MARK: - chapter 6 tests
-extension JPSJsonPointerTests {
     
     
     //
@@ -160,11 +149,7 @@ extension JPSJsonPointerTests {
     
     
     
-}
 
-
-// MARK: - chapter 7 tests
-extension JPSJsonPointerTests {
     
     
     //
@@ -189,11 +174,7 @@ extension JPSJsonPointerTests {
     
     
     
-}
 
-
-// MARK: - chapter 8 tests
-extension JPSJsonPointerTests {
     
     
     //
@@ -210,10 +191,7 @@ extension JPSJsonPointerTests {
     //
     //
     
-}
 
-// MARK: - misc tests
-extension JPSJsonPointerTests {
     
     func testIfTraverseReturnsNextPointer() {
         do {

@@ -2,7 +2,7 @@ import XCTest
 @testable import JsonPatchSwift
 import SwiftyJSON
 
-class JPSJsonPatchTests: XCTestCase {
+class JSONPatchTests: XCTestCase {
     
     // reusable method
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
