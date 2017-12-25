@@ -12,7 +12,9 @@ public struct JSONPatchOperation {
     public let value: JSON
     public let from: JSONPointer?
     
-    /// Operation types as stated in https://tools.ietf.org/html/rfc6902#page-4.
+    /**
+     Operation types as stated in https://tools.ietf.org/html/rfc6902#page-4.
+     */
     public enum OperationType: String {
         case add
         case remove

@@ -40,8 +40,6 @@ extension JSONPatch: Equatable {
 
 extension JSONPatch {
     
-    // MARK: - Private functions
-    
     private enum Parameter: String {
         case op
         case path

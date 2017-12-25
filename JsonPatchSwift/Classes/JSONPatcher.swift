@@ -1,11 +1,11 @@
 
 import SwiftyJSON
 
-/**
- RFC 6902 compliant JSONPatch implementation.
- */
 public struct JSONPatcher {
     
+    /**
+     RFC 6902 compliant JSONPatch implementation.
+     */
     public static func apply(patch: JSONPatch, to json: JSON) throws -> JSON {
         var tempJson = json
         for operation in patch.operations {
@@ -23,8 +23,6 @@ public struct JSONPatcher {
 }
 
 extension JSONPatcher {
-    
-    // MARK: - Private functions
 
     private static func add(_ operation: JSONPatchOperation, to json: JSON) throws -> JSON {
         guard !operation.pointer.pointerValue.isEmpty else { return operation.value }
