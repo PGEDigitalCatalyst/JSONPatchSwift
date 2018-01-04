@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		82A598301FEF86AE00140BCD /* AddOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A5982F1FEF86AE00140BCD /* AddOperationTests.swift */; };
 		82A598321FEF86B900140BCD /* CopyOperationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A598311FEF86B900140BCD /* CopyOperationTests.swift */; };
 		82A598341FEF86CB00140BCD /* DocumentStructureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A598331FEF86CB00140BCD /* DocumentStructureTests.swift */; };
@@ -25,7 +24,6 @@
 		5D683E51902FDA4BEC8DF8CE /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* JsonPatchSwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JsonPatchSwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		82A5982F1FEF86AE00140BCD /* AddOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddOperationTests.swift; sourceTree = "<group>"; };
 		82A598311FEF86B900140BCD /* CopyOperationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyOperationTests.swift; sourceTree = "<group>"; };
 		82A598331FEF86CB00140BCD /* DocumentStructureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentStructureTests.swift; sourceTree = "<group>"; };
@@ -74,7 +72,6 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				82A5982F1FEF86AE00140BCD /* AddOperationTests.swift */,
 				82A5983B1FEF872700140BCD /* RemoveOperationTests.swift */,
 				82A5983D1FEF873400140BCD /* ReplaceOperationTests.swift */,
@@ -252,7 +249,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				82A598301FEF86AE00140BCD /* AddOperationTests.swift in Sources */,
 				82A598341FEF86CB00140BCD /* DocumentStructureTests.swift in Sources */,
 				82A598361FEF86E900140BCD /* JSONPatchTests.swift in Sources */,

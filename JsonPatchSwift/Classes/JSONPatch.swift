@@ -1,77 +1,32 @@
+
 import SwiftyJSON
 
-/// Representation of a JSON Patch
-public struct JPSJsonPatch {
+public struct JSONPatch {
     
-    let operations: [JPSOperation]
+    public let operations: [JSONPatchOperation]
     
-    /**
-     Initializes a new `JPSJsonPatch` based on a given SwiftyJSON representation.
-     - Parameter _: A String representing one or many JSON Patch operations.
-     e.g. (1) JSON({ "op": "add", "path": "/", "value": "foo" })
-     or (> 1)
-     JSON([ { "op": "add", "path": "/", "value": "foo" },
-     { "op": "test", "path": "/", "value": "foo } ])
-     - Throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to
-     notify failed initialization.
-     - Returns: a `JPSJsonPatch` representation of the given SwiftJSON object
-     */
-    public init(_ patch: JSON) throws {
-        
-        // Check if there is an array of a dictionary as root element. Both are valid JSON patch documents.
-        if patch.type == .dictionary {
-            self.operations = [try JPSJsonPatch.extractOperationFromJson(patch)]
-            
-        } else if patch.type == .array {
-            guard 0 < patch.count else {
-                throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PatchWithEmptyError)
-            }
-            var operationArray = [JPSOperation]()
-            for i in 0..<patch.count {
-                let operation = patch[i]
-                operationArray.append(try JPSJsonPatch.extractOperationFromJson(operation))
-            }
-            self.operations = operationArray
-            
-        } else {
-            // All other types are not a valid JSON Patch Operation.
-            throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.InvalidRootElement)
-        }
+    public init(jsonString: String) throws {
+        guard let data = jsonString.data(using: .utf8) else { throw JSONPatchError.badStringEncoding }
+        let json = try JSON(data: data, options: .allowFragments)
+        try self.init(json: json)
     }
     
-    /**
-     Initializes a new `JPSJsonPatch` based on a given String representation.
-     - parameter _: A String representing one or many JSON Patch operations.
-     e.g. (1) { "op": "add", "path": "/", "value": "foo" }
-     or (> 1)
-     [ { "op": "add", "path": "/", "value": "foo" },
-     { "op": "test", "path": "/", "value": "foo } ]
-     - throws: can throw any error from `JPSJsonPatch.JPSJsonPatchInitialisationError` to notify failed initialization.
-     - returns: a `JPSJsonPatch` representation of the given JSON Patch String.
-     */
-    public init(_ patch: String) throws {
-        let data = patch.data(using: .utf8)!
-        let json: JSON
-        do {
-            json = try JSON(data: data, options: .allowFragments)
-        } catch {
-            throw JPSJsonPatchInitialisationError.InvalidJsonFormat(message: error.localizedDescription)
+    public init(json: JSON) throws {
+        switch json.type {
+        case .dictionary:
+            operations = [try JSONPatch.extractOperation(from: json)]
+        case .array:
+            guard !json.isEmpty else { throw JSONPatchError.emptyPatchArray }
+            operations = try json.array!.map({ try JSONPatch.extractOperation(from: $0) })
+        default:
+            throw JSONPatchError.invalidRootElement
         }
-        try self.init(json)
-    }
-    
-    /// Possible errors thrown by the init function.
-    public enum JPSJsonPatchInitialisationError: Error {
-        /** InvalidJsonFormat: The given String is not a valid JSON. */
-        case InvalidJsonFormat(message: String?)
-        /** InvalidPatchFormat: The given Patch is invalid (e.g. missing mandatory parameters). See error message for details. */
-        case InvalidPatchFormat(message: String?)
     }
 }
 
-extension JPSJsonPatch: Equatable {
+extension JSONPatch: Equatable {
     
-    public static func ==(lhs: JPSJsonPatch, rhs: JPSJsonPatch) -> Bool {
+    public static func ==(lhs: JSONPatch, rhs: JSONPatch) -> Bool {
         guard lhs.operations.count == rhs.operations.count else { return false }
         for index in 0..<lhs.operations.count {
             if !(lhs.operations[index] == rhs.operations[index]) {
@@ -82,40 +37,34 @@ extension JPSJsonPatch: Equatable {
     }
 }
 
-// MARK: - Private functions
-extension JPSJsonPatch {
+
+extension JSONPatch {
     
-    private static func extractOperationFromJson(_ json: JSON) throws -> JPSOperation {
-        
-        // The elements 'op' and 'path' are mandatory.
-        guard let operation = json[JPSConstants.JsonPatch.Parameter.Op].string else {
-            throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.OpElementNotFound)
-        }
-        guard let path = json[JPSConstants.JsonPatch.Parameter.Path].string else {
-            throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.PathElementNotFound)
-        }
-        guard let operationType = JPSOperation.JPSOperationType(rawValue: operation) else {
-            throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.InvalidOperation)
-        }
-        
-        // 'from' element mandatory for .Move, .Copy operations
-        var from: JPSJsonPointer?
-        if operationType == .Move || operationType == .Copy {
-            guard let fromValue = json[JPSConstants.JsonPatch.Parameter.From].string else {
-                throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.FromElementNotFound)
-            }
-            from = try JPSJsonPointer(rawValue: fromValue)
-        }
-        
-        // 'value' element mandatory for .Add, .Replace operations
-        let value = json[JPSConstants.JsonPatch.Parameter.Value]
-        // counterintuitive null check: https://github.com/SwiftyJSON/SwiftyJSON/issues/205
-        if (operationType == .Add || operationType == .Replace) && value.null != nil {
-            throw JPSJsonPatchInitialisationError.InvalidPatchFormat(message: JPSConstants.JsonPatch.InitialisationErrorMessages.ValueElementNotFound)
-        }
-        
-        let pointer = try JPSJsonPointer(rawValue: path)
-        return JPSOperation(type: operationType, pointer: pointer, value: value, from: from)
+    private enum Parameter: String {
+        case op
+        case path
+        case value
+        case from
     }
     
+    private static func extractOperation(from json: JSON) throws -> JSONPatchOperation {
+        guard let operation = json[Parameter.op.rawValue].string else { throw JSONPatchError.missingOperationElement }
+        guard let path = json[Parameter.path.rawValue].string else { throw JSONPatchError.missingPathElement }
+        guard let operationType = JSONPatchOperation.OperationType(rawValue: operation) else { throw JSONPatchError.invalidOperation }
+        
+        var from: JSONPointer?
+        if (operationType == .move || operationType == .copy) {
+            // 'from' element mandatory for .move, .copy operations
+            guard let fromValue = json[Parameter.from.rawValue].string else { throw JSONPatchError.missingFromElement }
+            from = try JSONPointer(rawValue: fromValue)
+        }
+        
+        let value = json[Parameter.value.rawValue]
+        // 'value' element mandatory for .add, .replace operations
+        // counterintuitive null check: https://github.com/SwiftyJSON/SwiftyJSON/issues/205
+        if (operationType == .add || operationType == .replace) && (value.null != nil) { throw JSONPatchError.missingValueElement }
+        
+        let pointer = try JSONPointer(rawValue: path)
+        return JSONPatchOperation(type: operationType, pointer: pointer, value: value, from: from)
+    }
 }

@@ -5,13 +5,13 @@ import SwiftyJSON
 // http://tools.ietf.org/html/rfc6902#section-4.6
 // 4.  Operations
 // 4.6. test
-class JPSTestOperationTests: XCTestCase {
+class TestOperationTests: XCTestCase {
     
     private func testTestPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            let resultingJSON = try JSONPatcher.apply(patch: jsonPatch, to: json)
             XCTAssertEqual(json, resultingJSON)
         } catch {
             XCTFail(error.localizedDescription)
@@ -21,8 +21,8 @@ class JPSTestOperationTests: XCTestCase {
     private func testTestPatchFailOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            XCTAssertThrowsError(try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json))
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            XCTAssertThrowsError(try JSONPatcher.apply(patch: jsonPatch, to: json))
         } catch {
             XCTFail(error.localizedDescription)
         }

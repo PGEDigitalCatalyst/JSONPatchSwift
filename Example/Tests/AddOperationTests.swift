@@ -5,14 +5,14 @@ import SwiftyJSON
 // http://tools.ietf.org/html/rfc6902#section-4.1
 // 4.  Operations
 // 4.1.  add
-class JPSAddOperationTests: XCTestCase {
+class AddOperationTests: XCTestCase {
     
     // reusable method
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            let resultingJSON = try JSONPatcher.apply(patch: jsonPatch, to: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
         } catch {
@@ -24,8 +24,8 @@ class JPSAddOperationTests: XCTestCase {
     private func testPatchFailOperation(json jsonString: String, jsonPatch jsonPatchString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            XCTAssertThrowsError(try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json))
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            XCTAssertThrowsError(try JSONPatcher.apply(patch: jsonPatch, to: json))
         } catch {
             XCTFail(error.localizedDescription)
         }

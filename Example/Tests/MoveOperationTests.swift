@@ -5,14 +5,14 @@ import SwiftyJSON
 // http://tools.ietf.org/html/rfc6902#section-4.4
 // 4.  Operations
 // 4.4.  move
-class JPSMoveOperationTests: XCTestCase {
+class MoveOperationTests: XCTestCase {
     
     // reusable method
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            let resultingJSON = try JSONPatcher.apply(patch: jsonPatch, to: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
         } catch {
@@ -79,6 +79,6 @@ class JPSMoveOperationTests: XCTestCase {
         {"op": "move", "path": "/bar"}
         """
         // missing "from"
-        XCTAssertThrowsError(try JPSJsonPatch(jsonPatch))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatch))
     }
 }

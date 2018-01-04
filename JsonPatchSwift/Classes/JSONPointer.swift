@@ -1,56 +1,46 @@
 
-
 import SwiftyJSON
 
-/// Possible errors thrown by the applyPatch function.
-public enum JPSJsonPointerError: Error {
-    /** ValueDoesNotContainDelimiter: JSON pointer values are delimited by a delimiter character, see https://tools.ietf.org/html/rfc6901#page-2. */
-    case ValueDoesNotContainDelimiter
-    /** NonEmptyPointerDoesNotStartWithDelimiter: A JSON pointer must start with a delimiter character, see https://tools.ietf.org/html/rfc6901#page-2. */
-    case NonEmptyPointerDoesNotStartWithDelimiter
-    /** ContainsEmptyReferenceToken: Every reference token in a JSON pointer must not be empty, see https://tools.ietf.org/html/rfc6901#page-2. */
-    case ContainsEmptyReferenceToken
-}
-
-/// RFC 6901 compliant JavaScript Object Notation (JSON) Pointer implementation.
-public struct JPSJsonPointer {
-    let rawValue: String
-    let pointerValue: [JSONSubscriptType]
-}
-
-extension JPSJsonPointer {
+/**
+ RFC 6901 compliant JavaScript Object Notation (JSON) Pointer implementation.
+ */
+public struct JSONPointer {
     
-    /**
-     Initializes a new `JPSJsonPointer` based on a given String representation.
-     
-     - Parameter rawValue: A String representing a valid JSON pointer, see https://tools.ietf.org/html/rfc6901.
-     
-     - Throws: can throw any error from `JPSJsonPointer.JPSJsonPointerError` to notify failed initialization.
-     
-     - Returns: a `JPSJsonPointer` representation of the given JSON pointer string.
-     */
+    public let rawValue: String
+    public let pointerValue: [JSONSubscriptType]
+
     public init(rawValue: String) throws {
-        guard rawValue.isEmpty || rawValue.contains(JPSConstants.JsonPointer.Delimiter) else {
-            throw JPSJsonPointerError.ValueDoesNotContainDelimiter
-        }
-        guard rawValue.isEmpty || rawValue.hasPrefix(JPSConstants.JsonPointer.Delimiter) else {
-            throw JPSJsonPointerError.NonEmptyPointerDoesNotStartWithDelimiter
-        }
-        let pointerValueWithoutFirstElement = Array(rawValue.components(separatedBy: JPSConstants.JsonPointer.Delimiter).dropFirst())
-        guard rawValue.isEmpty || !pointerValueWithoutFirstElement.contains(JPSConstants.JsonPointer.EmptyString) else {
-            throw JPSJsonPointerError.ContainsEmptyReferenceToken
-        }
-        let pointerValueAfterDecodingDelimiter = pointerValueWithoutFirstElement.map({ $0.replacingOccurrences(of: JPSConstants.JsonPointer.EscapedDelimiter, with: JPSConstants.JsonPointer.Delimiter) })
-        let pointerValue: [JSONSubscriptType] = pointerValueAfterDecodingDelimiter.map({ $0.replacingOccurrences(of: JPSConstants.JsonPointer.EscapedEscapeCharacter, with: JPSConstants.JsonPointer.EscapeCharater)})
-        
+        guard (rawValue.isEmpty || rawValue.contains(JSONPointer.delimiter)) else { throw JSONPatchError.pointerValueMissingDelimiter }
+        guard (rawValue.isEmpty || rawValue.hasPrefix(JSONPointer.delimiter)) else { throw JSONPatchError.nonEmptyPointerDoesNotStartWithDelimiter }
+        let pointerValueWithoutFirstElement = Array(rawValue.components(separatedBy: JSONPointer.delimiter).dropFirst())
+        guard rawValue.isEmpty || !pointerValueWithoutFirstElement.contains(JSONPointer.emptyString) else { throw JSONPatchError.pointerContainsEmptyReferenceToken }
+        let pointerValueAfterDecodingDelimiter = pointerValueWithoutFirstElement.map({ $0.replacingOccurrences(of: JSONPointer.escapedDelimiter, with: JSONPointer.delimiter) })
+        let pointerValue: [JSONSubscriptType] = pointerValueAfterDecodingDelimiter.map({ $0.replacingOccurrences(of: JSONPointer.escapedEscapeCharacter, with: JSONPointer.escapeCharacter)})
         self.init(rawValue: rawValue, pointerValue: pointerValue)
     }
     
+    public init(rawValue: String, pointerValue: [JSONSubscriptType]) {
+        self.rawValue = rawValue
+        self.pointerValue = pointerValue
+    }
 }
 
-extension JPSJsonPointer {
-    static func traverse(_ pointer: JPSJsonPointer) -> JPSJsonPointer {
-        let pointerValueWithoutFirstElement = Array(pointer.rawValue.components(separatedBy: JPSConstants.JsonPointer.Delimiter).dropFirst().dropFirst()).joined(separator: JPSConstants.JsonPointer.Delimiter)
-        return try! JPSJsonPointer(rawValue: JPSConstants.JsonPointer.Delimiter + pointerValueWithoutFirstElement)
+extension JSONPointer {
+    static let delimiter = "/"
+    static let endOfArrayMarker = "-"
+    static let emptyString = ""
+    static let escapeCharacter = "~"
+    static let escapedDelimiter = "~1"
+    static let escapedEscapeCharacter = "~0"
+    
+    static func traverse(_ pointer: JSONPointer) -> JSONPointer {
+        let pointerValueWithoutFirstElement = Array(pointer.rawValue.components(separatedBy: delimiter).dropFirst().dropFirst()).joined(separator: delimiter)
+        return try! JSONPointer(rawValue: delimiter + pointerValueWithoutFirstElement)
+    }
+}
+
+extension JSONPointer: Equatable {
+    public static func ==(lhs: JSONPointer, rhs: JSONPointer) -> Bool {
+        return lhs.rawValue == rhs.rawValue
     }
 }

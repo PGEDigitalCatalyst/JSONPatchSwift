@@ -5,14 +5,14 @@ import SwiftyJSON
 // http://tools.ietf.org/html/rfc6902#section-4.3
 // 4.  Operations
 // 4.3. replace
-class JPSReplaceOperationTests: XCTestCase {
+class ReplaceOperationTests: XCTestCase {
     
     // reusable method
     private func testPatchOperation(json jsonString: String, jsonPatch jsonPatchString: String, expectedJSON expectedJSONString: String) {
         do {
             let json = JSON(parseJSON: jsonString)
-            let jsonPatch = try JPSJsonPatch(jsonPatchString)
-            let resultingJSON = try JPSJsonPatcher.applyPatch(jsonPatch, toJson: json)
+            let jsonPatch = try JSONPatch(jsonString: jsonPatchString)
+            let resultingJSON = try JSONPatcher.apply(patch: jsonPatch, to: json)
             let expectedJSON = JSON(parseJSON: expectedJSONString)
             XCTAssertEqual(resultingJSON, expectedJSON)
         } catch {
@@ -52,6 +52,6 @@ class JPSReplaceOperationTests: XCTestCase {
         {"op": "replace", "path": "/foo/1"}
         """
         // missing "value"
-        XCTAssertThrowsError(try JPSJsonPatch(jsonPatch))
+        XCTAssertThrowsError(try JSONPatch(jsonString: jsonPatch))
     }
 }
